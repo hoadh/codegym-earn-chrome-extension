@@ -21,24 +21,27 @@
                 <input type="text" class="form-control" id="firstName" name="firstName">
             </div>
             <div class="mb-3">
+                <button class="btn btn-primary" type="button" id="switchName">Đảo họ tên</button>
+            </div>
+            <div class="mb-3">
                 <label for="lastName" class="form-label">Last Name:</label>
                 <input type="text" class="form-control" id="lastName" name="lastName">
             </div>
             <div class="mb-3">
                 <label for="initialStatus" class="form-label">Initial Status:</label>
-                <input type="text" class="form-control" id="initialStatus" name="initialStatus">
+                <select class="form-select" id="initialStatus" name="initialStatus"></select>
             </div>
             <div class="mb-3">
                 <label for="referredBy" class="form-label">Referred By:</label>
-                <input type="text" class="form-control" id="referredBy" name="referredBy">
+                <select class="form-select" id="referredBy" name="referredBy"></select>
             </div>
             <div class="mb-3">
                 <label for="source" class="form-label">Source:</label>
-                <input type="text" class="form-control" id="source" name="source">
+                <select class="form-select" id="source" name="source"></select>
             </div>
             <div class="mb-3">
                 <label for="firstCampaign" class="form-label">First Campaign:</label>
-                <input type="text" class="form-control" id="firstCampaign" name="firstCampaign">
+                <select class="form-select" id="firstCampaign" name="firstCampaign"></select>
             </div>
             <div class="mb-3">
                 <label for="phone" class="form-label">Phone:</label>
@@ -53,26 +56,29 @@
                 <input type="text" class="form-control" id="facebook" name="facebook">
             </div>
             <div class="mb-3">
-                <label for="gender" class="form-label">Gender:</label>
+                <label for="gender" class="form-label">Giới tính:</label>
                 <select class="form-select" id="gender" name="gender">
-                    <option value="male">Male</option>
-                    <option value="female">Female</option>
-                    <!-- Add other options as needed -->
+                    <option value=0>Nam</option>
+                    <option value=1>Nữ</option>
+                    <option value=2>Khác</option>
                 </select>
             </div>
             <div class="mb-3">
                 <label for="salutation" class="form-label">Salutation:</label>
-                <input type="text" class="form-control" id="salutation" name="salutation">
+                <select class="form-select" id="salutation" name="salutation">
+                    <option value=0>Anh</option>
+                    <option value=1>Chị</option>
+                </select>
             </div>
-            <div class="mb-3">
+            <!-- <div class="mb-3">
                 <label for="photo" class="form-label">Photo:</label>
                 <input type="file" class="form-control" id="photo" name="photo">
-            </div>
-            <div class="mb-3">
+            </div> -->
+            <!-- <div class="mb-3">
                 <label for="birthdate" class="form-label">Birthdate:</label>
                 <input type="date" class="form-control" id="birthdate" name="birthdate">
-            </div>
-            <div class="mb-3">
+            </div> -->
+            <!-- <div class="mb-3">
                 <label for="province" class="form-label">Province:</label>
                 <input type="text" class="form-control" id="province" name="province">
             </div>
@@ -83,40 +89,41 @@
             <div class="mb-3">
                 <label for="address" class="form-label">Address:</label>
                 <input type="text" class="form-control" id="address" name="address">
-            </div>
-            <div class="mb-3">
+            </div> -->
+            <!-- <div class="mb-3">
                 <label for="background" class="form-label">Background:</label>
                 <input type="text" class="form-control" id="background" name="background">
-            </div>
-            <div class="mb-3">
+            </div> -->
+            <!-- <div class="mb-3">
                 <label for="goal" class="form-label">Goal:</label>
                 <input type="text" class="form-control" id="goal" name="goal">
             </div>
             <div class="mb-3">
                 <label for="job" class="form-label">Job:</label>
                 <input type="text" class="form-control" id="job" name="job">
-            </div>
-            <div class="mb-3">
+            </div> -->
+            <!-- <div class="mb-3">
                 <label for="product" class="form-label">Product:</label>
                 <input type="text" class="form-control" id="product" name="product">
-            </div>
-            <div class="mb-3">
+            </div> -->
+            <!-- <div class="mb-3">
                 <label for="trainingCenter" class="form-label">Training Center:</label>
                 <input type="text" class="form-control" id="trainingCenter" name="trainingCenter">
-            </div>
-            <div class="mb-3">
+            </div> -->
+            <!-- <div class="mb-3">
                 <label for="studyPlace" class="form-label">Study Place:</label>
                 <input type="text" class="form-control" id="studyPlace" name="studyPlace">
-            </div>
-            <div class="mb-3">
+            </div> -->
+            <!-- <div class="mb-3">
                 <label for="group" class="form-label">Group:</label>
                 <input type="text" class="form-control" id="group" name="group">
-            </div>
-            <input type="submit" class="btn btn-primary" value="Submit">
+            </div> -->
+            <input type="button" class="btn btn-primary" id="saveLead" value="Submit">
+            <div id="info"></div>
         </form>
     </div>
 
-    <script src="./scripts/popup.js"></script>
+    <script src="./scripts/lead-form.js"></script>
 </body>
 
 </html>

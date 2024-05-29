@@ -1,5 +1,9 @@
-window.onload = function () {
-  const token = localStorage.getItem('earn_token');
+window.onload = async function () {
+  const data = await chrome.storage.sync.get("lead");
+  console.log(data);
+  // alert('Đã lấy thông tin Lead: ' + JSON.stringify(data.lead));
+
+  const token = localStorage.getItem('access_token');
   if (token) {
     loginSuccess();
   } else {
@@ -11,7 +15,7 @@ function loginSuccess() {
   loginForm.style.display = 'none';
   info.style.display = 'block';
   logout.style.display = 'block';
-  info.innerHTML = 'Bạn đã đăng nhập. Hãy thực hiện các thao tác trên Facebook.';
+  info.innerHTML = 'Bạn đã đăng nhập. Hãy thực hiện các thao tác trên Facebook. Hãy bắt đầu <a href="lead-form.html">tạo lead<a/>';
 }
 
 function loginFail() {
@@ -21,7 +25,7 @@ function loginFail() {
 }
 
 document.getElementById('logout').addEventListener('click', function (e) {
-  localStorage.removeItem('earn_token');
+  localStorage.removeItem('access_token');
   loginForm.style.display = 'block';
   info.style.display = 'none';
   logout.style.display = 'none';
@@ -50,7 +54,8 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     const res = await fetchRes.json();
 
     if (res.status) {
-      localStorage.setItem('earn_token', res.data?.access_token);
+      localStorage.setItem('access_token', res.data?.access_token);
+      localStorage.setItem('user_id', res.data?.id);
       alert('Đăng nhập thành công!');
       loginSuccess();
     } else {

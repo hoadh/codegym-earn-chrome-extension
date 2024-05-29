@@ -2,15 +2,21 @@ chrome.runtime.onMessage.addListener(
     function (request) {
         switch (request.type) {
             case 'add-lead':
-                return addLead(request.data);
-            case 'remove-lead':
+                addLead(request.data);
+                break;
+            case 'save-earn-token':
+                saveEarnToken(request.data);
                 break;
         }
     });
 
 function addLead(data) {
     console.log('Adding lead:', data);
-    var leads = [];
-    leads.push(data);
-    return 'ok';
+    chrome.storage.sync.set({ lead: data, action: 'openLeadForm' });
+    chrome.action.openPopup();
+}
+
+function saveEarnToken(token) {
+    console.log('Saving earn token:', token);
+    chrome.storage.sync.set({ token });
 }
