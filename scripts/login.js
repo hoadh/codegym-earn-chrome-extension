@@ -1,8 +1,6 @@
-window.onload = async function () {
-  const data = await chrome.storage.sync.get("lead");
-  console.log(data);
-  // alert('Đã lấy thông tin Lead: ' + JSON.stringify(data.lead));
+import { API_BASE_URL } from './common.js';
 
+window.onload = async function () {
   const token = localStorage.getItem('access_token');
   if (token) {
     loginSuccess();
@@ -33,16 +31,13 @@ document.getElementById('logout').addEventListener('click', function (e) {
 });
 
 document.getElementById('loginForm').addEventListener('submit', async function (e) {
-  e.preventDefault(); // Prevent the form from being submitted in the traditional way
+  e.preventDefault();
   var email = document.getElementById('email').value;
   var password = document.getElementById('password').value;
-  const url = 'https://earn.dev.codegym.vn/api/login';
+  const url = `${API_BASE_URL}/login`;
   const data = { email, password };
   const options = {
     method: 'POST',
-    mode: "cors",
-    credentials: "same-origin",
-    referrerPolicy: "no-referrer",
     headers: {
       'Content-Type': 'application/json'
     },

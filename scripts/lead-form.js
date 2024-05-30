@@ -1,4 +1,4 @@
-const API_BASE_URL = 'https://earn.dev.codegym.vn/api';
+import { API_BASE_URL } from './common.js';
 const ACCESS_TOKEN = localStorage.getItem('access_token');
 
 document.getElementById('saveLead').addEventListener('click', saveLead);
@@ -19,114 +19,67 @@ window.onload = async function () {
     const firstName = name.substring(0, lastSpaceIndex);
     const lastName = name.substring(lastSpaceIndex + 1);
     const profileLink = data.lead.profileLink;
-    console.log('First name:', firstName);
-    console.log('Last name:', lastName);
     // Assign to form
     document.getElementById('firstName').value = firstName;
     document.getElementById('lastName').value = lastName;
     document.getElementById('facebook').value = profileLink;
 
     // Get statuses
-    const statuses = await getStatus();
-    console.log('Statuses:', statuses);
-    const statusOptions = createStatusOptions(statuses);
+    const statuses = await getAPI('statuses');
+    const statusOptions = createOptions(statuses);
     const statusSelect = document.getElementById('initialStatus');
     statusSelect.innerHTML = statusOptions.join('');
-    statusSelect.value = statuses[0].id;
+    const G1 = findIdByName('G1', statuses);
+    statusSelect.value = G1 || statuses[0].id;
 
     // Get users
-    const users = await getUsers();
-    console.log('Users:', users);
-    const userOptions = createUsersOptions(users);
+    const users = await getAPI('users');
+    const userOptions = createOptions(users);
     const userSelect = document.getElementById('referredBy');
     userSelect.innerHTML = userOptions.join('');
     const user_id = localStorage.getItem('user_id');
     userSelect.value = user_id || users[0].id;
 
     // Get sources
-    const sources = await getSourses();
-    console.log('Sources:', sources);
+    const sources = await getAPI('sources');
     const sourceOptions = createSourcesOptions(sources);
     const sourceSelect = document.getElementById('source');
     sourceSelect.innerHTML = sourceOptions.join('');
-    // sourceSelect.value = sources[0].id;
 
     // Get campaigns
-    const campaigns = await getCamapigns();
-    console.log('Campaigns:', campaigns);
-    const campaignOptions = createCampaignsOptions(campaigns);
+    const campaigns = await getAPI('campaigns');
+    const campaignOptions = createOptions(campaigns);
     const campaignSelect = document.getElementById('firstCampaign');
     campaignSelect.innerHTML = campaignOptions.join('');
-    // campaignSelect.value = campaigns[0].id;
+    const chat_campaign_id = findIdByName('Nhắn tin', campaigns);
+    campaignSelect.value = chat_campaign_id || campaigns[0].id;
 
 }
 
-async function getStatus() {
-    const url = `${API_BASE_URL}/statuses`;
-    const options = {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${ACCESS_TOKEN}`
-        }
-    };
-    const fetchRes = await fetch(url, options);
-    const res = await fetchRes.json();
-    console.log(res);
-    return res.data;
-}
-
-function createStatusOptions(statuses) {
-    const options = statuses.map(status => {
-        return `<option value="${status.id}">${status.name}</option>`;
+function createOptions(list) {
+    const options = list.map(item => {
+        return `<option value="${item.id}">${item.name}</option>`;
     });
     return options;
 }
 
-async function getUsers() {
-    const url = `${API_BASE_URL}/users`;
-    const options = {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${ACCESS_TOKEN}`
-        }
-    };
-    const fetchRes = await fetch(url, options);
-    const res = await fetchRes.json();
-    console.log(res);
-    return res.data;
-
-}
-
-function createUsersOptions(users) {
-    const options = users.map(user => {
-        return `<option value="${user.id}">${user.name}</option>`;
-    });
-    return options;
-}
-
-async function getSourses() {
-    const url = `${API_BASE_URL}/sources`;
-    const options = {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${ACCESS_TOKEN}`
-        }
-    };
-    const fetchRes = await fetch(url, options);
-    const res = await fetchRes.json();
-    console.log(res);
-    return res.data;
+function findIdByName(name, list) {
+    const item = list.find(item => item.name === name);
+    return item ? item.id : null;
 }
 
 function createSourcesOptions(sources) {
-    const options = sources.map(source => {
+    const facebookSources = sources.filter(source => source.name.startsWith('Facebook'));
+    const lowerPrioritySources = sources.filter(source => !source.name.startsWith('Facebook'));
+    const finalSources = facebookSources.concat(lowerPrioritySources);
+    const options = finalSources.map(source => {
         return `<option value="${source.id}">${source.name}</option>`;
     });
     return options;
 }
 
-async function getCamapigns() {
-    const url = `${API_BASE_URL}/campaigns`;
+async function getAPI(entity) {
+    const url = `${API_BASE_URL}/${entity}`;
     const options = {
         method: 'GET',
         headers: {
@@ -135,15 +88,7 @@ async function getCamapigns() {
     };
     const fetchRes = await fetch(url, options);
     const res = await fetchRes.json();
-    console.log(res);
     return res.data;
-}
-
-function createCampaignsOptions(campaigns) {
-    const options = campaigns.map(campaign => {
-        return `<option value="${campaign.id}">${campaign.name}</option>`;
-    });
-    return options;
 }
 
 async function saveLead() {
@@ -159,6 +104,7 @@ async function saveLead() {
     const salutation = document.getElementById('salutation').value;
     const facebook = document.getElementById('facebook').value;
     const gender = document.getElementById('gender').value;
+    const description = document.getElementById('description').value;
     const url = `${API_BASE_URL}/leads`;
     const data = {
         first_name: firstName,
@@ -171,9 +117,9 @@ async function saveLead() {
         initial_status_id: initialStatus,
         facebook,
         gender,
-        first_campaign: firstCampaign
+        first_campaign: firstCampaign,
+        description
     };
-    alert(JSON.stringify(data));
     const options = {
         method: 'POST',
         headers: {
