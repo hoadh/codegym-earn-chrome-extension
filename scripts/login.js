@@ -1,11 +1,28 @@
-import { API_BASE_URL } from './common.js';
+import { API_BASE_URL, getAPI } from './common.js';
 
 window.onload = async function () {
-  const token = localStorage.getItem('access_token');
-  if (token) {
-    loginSuccess();
+  const data = await chrome.storage.sync.get("action");
+  if (data.action === 'openLeadForm') {
+    const lead = await chrome.storage.sync.get("lead");
+    const profileLink = lead.lead.profileLink;
+    const leadRes = await getAPI('leads?search=' + profileLink);
+    if (leadRes) {
+      const total = leadRes.total;
+      if (total > 0) {
+        window.location.href = 'leads-list.html';
+      } else {
+        window.location.href = 'lead-form.html';
+      }
+    } else {
+      alert('Có lỗi xảy ra. ' + leadRes.message);
+    }
   } else {
-    loginFail();
+    const token = localStorage.getItem('access_token');
+    if (token) {
+      loginSuccess();
+    } else {
+      loginFail();
+    }
   }
 }
 

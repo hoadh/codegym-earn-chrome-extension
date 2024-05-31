@@ -172,7 +172,6 @@ function createCustomButton(id, title) {
 window.onload = function () {
     var button = createIconButton('btnGetLead', '');
     button.addEventListener('click', async function () {
-        var link = window.location.href;
         const personInfo = getPersonInfo();
         console.log(personInfo);
         await chrome.runtime.sendMessage({

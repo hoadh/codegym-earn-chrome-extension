@@ -1,4 +1,4 @@
-import { API_BASE_URL } from './common.js';
+import { API_BASE_URL, getAPI } from './common.js';
 const ACCESS_TOKEN = localStorage.getItem('access_token');
 
 document.getElementById('saveLead').addEventListener('click', saveLead);
@@ -11,7 +11,6 @@ document.getElementById('switchName').addEventListener('click', function () {
 
 window.onload = async function () {
     const data = await chrome.storage.sync.get("lead");
-    console.log(data);
 
     // Split name to first name and last name
     const name = data.lead.name;
@@ -78,19 +77,6 @@ function createSourcesOptions(sources) {
     return options;
 }
 
-async function getAPI(entity) {
-    const url = `${API_BASE_URL}/${entity}`;
-    const options = {
-        method: 'GET',
-        headers: {
-            'Authorization': `Bearer ${ACCESS_TOKEN}`
-        }
-    };
-    const fetchRes = await fetch(url, options);
-    const res = await fetchRes.json();
-    return res.data;
-}
-
 async function saveLead() {
     document.getElementById('info').innerHTML = ''; // Clear previous error messages
     const firstName = document.getElementById('firstName').value;
@@ -133,6 +119,7 @@ async function saveLead() {
     alert(JSON.stringify(res));
     if (res.status) {
         alert('Lưu thông tin Lead thành công!');
+        chrome.storage.sync.set({ action: '' });
         window.close();
     } else {
         // check is res.message is an object or string
