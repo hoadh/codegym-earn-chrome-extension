@@ -8,21 +8,26 @@
         integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
-            width: 500px;
+            width: 600px;
             min-height: 150px;
         }
     </style>
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-fluid">
         <div class="card-deck mb-3 text-center border-0">
             <div class="card mb-4 box-shadow border-0">
                 <div class="card-header">
                     <h4 class="my-0 font-weight-normal">Thông tin Lead</h4>
                 </div>
                 <div class="card-body">
-                    <ul id="leadsList" class="list-unstyled mt-3 mb-4"></ul>
+                    <div class="d-flex justify-content-center" style="margin-top: 30px;">
+                        <div id="loading" class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                    <ul id="leadsList" class="list-unstyled list-group mt-3 mb-4"></ul>
                     <button id="logout" type="button" class="btn btn-lg btn-block btn-outline-secondary">Đăng xuất</button>
                 </div>
             </div>

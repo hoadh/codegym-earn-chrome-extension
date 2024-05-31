@@ -1,28 +1,32 @@
 import { API_BASE_URL, getAPI } from './common.js';
 
 window.onload = async function () {
+  const token = localStorage.getItem('access_token');
+  if (!token) {
+    loginFail();
+    return;
+  }
+
   const data = await chrome.storage.sync.get("action");
   if (data.action === 'openLeadForm') {
+    loading.style.display = 'block';
     const lead = await chrome.storage.sync.get("lead");
-    const profileLink = lead.lead.profileLink;
-    const leadRes = await getAPI('leads?search=' + profileLink);
-    if (leadRes) {
-      const total = leadRes.total;
-      if (total > 0) {
-        window.location.href = 'leads-list.html';
+    const profileLink = lead.lead?.profileLink;
+    if (profileLink && profileLink !== '') {
+      const leadRes = await getAPI('leads?search=' + profileLink);
+      if (leadRes) {
+        const total = leadRes.total;
+        if (total > 0) {
+          window.location.href = 'leads-list.html';
+        } else {
+          window.location.href = 'lead-form.html';
+        }
       } else {
-        window.location.href = 'lead-form.html';
+        alert('Có lỗi xảy ra. ' + leadRes.message);
       }
-    } else {
-      alert('Có lỗi xảy ra. ' + leadRes.message);
     }
   } else {
-    const token = localStorage.getItem('access_token');
-    if (token) {
-      loginSuccess();
-    } else {
-      loginFail();
-    }
+    loginSuccess();
   }
 }
 
@@ -30,13 +34,15 @@ function loginSuccess() {
   loginForm.style.display = 'none';
   info.style.display = 'block';
   logout.style.display = 'block';
-  info.innerHTML = 'Bạn đã đăng nhập. Hãy thực hiện các thao tác trên Facebook. Hãy bắt đầu <a href="lead-form.html">tạo lead<a/>';
+  info.innerHTML = 'Bạn đã đăng nhập! Hãy thực hiện các thao tác trên Facebook Business.';
+  loading.style.display = 'none';
 }
 
 function loginFail() {
   loginForm.style.display = 'block';
   info.style.display = 'none';
   logout.style.display = 'none';
+  loading.style.display = 'none';
 }
 
 document.getElementById('logout').addEventListener('click', function (e) {
@@ -68,7 +74,7 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     if (res.status) {
       localStorage.setItem('access_token', res.data?.access_token);
       localStorage.setItem('user_id', res.data?.id);
-      alert('Đăng nhập thành công!');
+      chrome.runtime.sendMessage({ type: 'clear-data' });
       loginSuccess();
     } else {
       alert('Đăng nhập thất bại. Vui lòng thử lại.');

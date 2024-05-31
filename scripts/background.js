@@ -4,6 +4,9 @@ chrome.runtime.onMessage.addListener(
             case 'add-lead':
                 addLead(request.data);
                 break;
+            case 'clear-data':
+                clearData();
+                break;
             case 'save-earn-token':
                 saveEarnToken(request.data);
                 break;
@@ -11,9 +14,12 @@ chrome.runtime.onMessage.addListener(
     });
 
 function addLead(data) {
-    console.log('Adding lead:', data);
     chrome.storage.sync.set({ lead: data, action: 'openLeadForm' });
     chrome.action.openPopup();
+}
+
+function clearData() {
+    chrome.storage.sync.set({ lead: {}, action: '' });
 }
 
 function saveEarnToken(token) {
