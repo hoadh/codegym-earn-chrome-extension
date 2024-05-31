@@ -1,4 +1,4 @@
-import { EARN_BASE_URL, getAPI } from './common.js';
+import { LEAD_DETAIL_URL, EARN_BASE_URL, getAPI } from './common.js';
 
 window.onload = async function () {
     const data = await chrome.storage.sync.get("lead");

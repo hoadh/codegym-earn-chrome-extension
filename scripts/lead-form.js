@@ -116,7 +116,6 @@ async function saveLead() {
     };
     const fetchRes = await fetch(url, options);
     const res = await fetchRes.json();
-    alert(JSON.stringify(res));
     if (res.status) {
         alert('Lưu thông tin Lead thành công!');
         chrome.storage.sync.set({ action: '' });
