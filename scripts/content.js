@@ -1,25 +1,35 @@
+const ELEMENT_PROFILE_DETAIL = 'div[data-pagelet="BizInboxContextCardDetail"]';
+const ELEMENT_TOOLBAR = '.x78zum5.x13a6bvl.x2lwn1j.xeuugli.x2lah0s div .x5yr21d';
 // Function to extract the person's information
 function getPersonInfo() {
     // Get the container holding the information
-    const container = document.querySelector('div[data-pagelet="BizInboxContextCardDetail"]');
+    const container = document.querySelector(ELEMENT_PROFILE_DETAIL);
 
-    // Get the person's name
-    const nameElement = container.querySelector('div[role="heading"]');
-    const name = nameElement ? nameElement.textContent : null;
+    let personInfo = {
+        name: null,
+        imageUrl: null,
+        profileLink: null
+    }
+    if (container) {
+        // Get the person's name
+        const nameElement = container.querySelector('div[role="heading"]');
+        const name = nameElement ? nameElement.textContent : null;
 
-    // Get the person's image
-    const imgElement = container.querySelector('img');
-    const imageUrl = imgElement ? imgElement.src : null;
+        // Get the person's image
+        const imgElement = container.querySelector('img');
+        const imageUrl = imgElement ? imgElement.src : null;
 
-    // Get the profile link
-    const linkElement = container.querySelector('a[role="link"]');
-    const profileLink = linkElement ? linkElement.href : null;
+        // Get the profile link
+        const linkElement = container.querySelector('a[role="link"]');
+        const profileLink = linkElement ? linkElement.href : null;
 
-    return {
-        name: name,
-        imageUrl: imageUrl,
-        profileLink: profileLink
-    };
+        personInfo = {
+            name: name,
+            imageUrl: imageUrl,
+            profileLink: profileLink
+        };
+    }
+    return personInfo;
 }
 
 function createIconButton(buttonId) {
@@ -58,7 +68,7 @@ function createIconButton(buttonId) {
     var innerDiv2 = document.createElement('div');
     innerDiv2.className = 'x1qvwoe0 xjm9jq1 x1y332i5 xcwd3tp x1jyxor1 x39eecv x6ikm8r x10wlt62 x10l6tqk xuxw1ft x1i1rx1s';
     innerDiv2.setAttribute('data-sscoverage-ignore', 'true');
-    innerDiv2.textContent = 'Move to Done';
+    innerDiv2.textContent = 'CodeGym Leads';
 
     var innerDiv3 = document.createElement('div');
     innerDiv3.className = 'x6s0dn4 x78zum5 x1q0g3np xozqiw3 x2lwn1j xeuugli x1iyjqo2 x19lwn94 x1hc1fzr x13dflua x6o7n8i xxziih7 x12w9bfk xl56j7k xh8yej3';
@@ -70,9 +80,8 @@ function createIconButton(buttonId) {
     icon.className = 'img';
     icon.setAttribute('alt', '');
     icon.setAttribute('data-visualcompletion', 'css-img');
-    // icon.style.backgroundImage = "url('https://static.xx.fbcdn.net/rsrc.php/v3/yt/r/G3SKP43TjXu.png?_nc_eui2=AeGOJq__4_ctrcvL_3NanlbTvRiLlm3SnEe9GIuWbdKcRx9zcJHmg5YjF6rmmOeFXpiU_S-yN24Ed5UWI-6Nc5bz')";
-    // icon.style.backgroundPosition = '-367px -761px';
-    icon.style.backgroundSize = 'auto';
+    icon.style.backgroundImage = 'url("https://cdn.codegym.vn/wp-content/uploads/2018/07/icon-small-150x150.jpeg")';
+    icon.style.backgroundSize = '100%';
     icon.style.width = '16px';
     icon.style.height = '16px';
     icon.style.backgroundRepeat = 'no-repeat';
@@ -161,27 +170,24 @@ function createCustomButton(id, title) {
 }
 
 window.onload = function () {
-    var button = createCustomButton('btnGetLead', 'Lấy thông tin Lead');
+    var button = createIconButton('btnGetLead', '');
     button.addEventListener('click', async function () {
         var link = window.location.href;
-        console.log('Link:', link);
-        // Usage
         const personInfo = getPersonInfo();
         console.log(personInfo);
-        console.log(localStorage.getItem('earn_token'));
         await chrome.runtime.sendMessage({
             type: 'add-lead',
             data: personInfo
         });
     });
 
-    setTimeout(function () {
-        const container = document.querySelector('.x6s0dn4.x78zum5.x1nhvcw1.x19lwn94[role="toolbar"]');
+    const interval = setInterval(() => {
+        console.log('Waiting for container');
+        const container = document.querySelector(ELEMENT_TOOLBAR);
         if (container) {
-            // container.appendChild(button);
             container.insertBefore(button, container.firstChild);
-
+            clearInterval(interval);
+            console.log('Done');
         }
-        console.log('Done');
-    }, 3000);
+    }, 500);
 }
