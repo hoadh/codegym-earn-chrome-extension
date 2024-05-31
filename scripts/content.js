@@ -172,21 +172,27 @@ function createCustomButton(id, title) {
 window.onload = function () {
     var button = createIconButton('btnGetLead', '');
     button.addEventListener('click', async function () {
-        const personInfo = getPersonInfo();
-        console.log(personInfo);
-        await chrome.runtime.sendMessage({
-            type: 'add-lead',
-            data: personInfo
+        waitForElement(ELEMENT_PROFILE_DETAIL, () => {
+            const personInfo = getPersonInfo();
+            console.log(personInfo);
+            chrome.runtime.sendMessage({
+                type: 'add-lead',
+                data: personInfo
+            });
         });
     });
 
+    waitForElement(ELEMENT_TOOLBAR, (element) => {
+        element.insertBefore(button, element.firstChild);
+    });
+}
+
+function waitForElement(selector, callback) {
     const interval = setInterval(() => {
-        console.log('Waiting for container');
-        const container = document.querySelector(ELEMENT_TOOLBAR);
-        if (container) {
-            container.insertBefore(button, container.firstChild);
+        const element = document.querySelector(selector);
+        if (element) {
             clearInterval(interval);
-            console.log('Done');
+            callback(element);
         }
     }, 500);
 }
