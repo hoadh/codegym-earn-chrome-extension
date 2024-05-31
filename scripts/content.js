@@ -82,8 +82,8 @@ function createIconButton(buttonId) {
     icon.setAttribute('data-visualcompletion', 'css-img');
     icon.style.backgroundImage = 'url("https://cdn.codegym.vn/wp-content/uploads/2018/07/icon-small-150x150.jpeg")';
     icon.style.backgroundSize = '100%';
-    icon.style.width = '16px';
-    icon.style.height = '16px';
+    icon.style.width = '20px';
+    icon.style.height = '20px';
     icon.style.backgroundRepeat = 'no-repeat';
     icon.style.display = 'inline-block';
 

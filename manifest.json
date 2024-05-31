@@ -17,7 +17,7 @@
         "service_worker": "./scripts/background.js"
     },
     "action": {
-        "default_popup": "login.html"
+        "default_popup": "popup.html"
     },
     "content_scripts": [
         {

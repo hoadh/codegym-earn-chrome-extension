@@ -16,8 +16,19 @@
 
 <body>
     <div class="container">
-        <div id="leadsList" class="list-group"></div>
+        <div class="card-deck mb-3 text-center border-0">
+            <div class="card mb-4 box-shadow border-0">
+                <div class="card-header">
+                    <h4 class="my-0 font-weight-normal">Thông tin Lead</h4>
+                </div>
+                <div class="card-body">
+                    <ul id="leadsList" class="list-unstyled mt-3 mb-4"></ul>
+                    <button id="logout" type="button" class="btn btn-lg btn-block btn-outline-secondary">Đăng xuất</button>
+                </div>
+            </div>
+        </div>
     </div>
+
     <script type="module" src="./scripts/common.js"></script>
     <script type="module" src="./scripts/leads-list.js"></script>
 </body>
