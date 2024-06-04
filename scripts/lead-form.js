@@ -53,6 +53,8 @@ window.onload = async function () {
     const chat_campaign_id = findIdByName('Nhắn tin', campaigns);
     campaignSelect.value = chat_campaign_id || campaigns[0].id;
 
+    // Clear lead data
+    chrome.storage.sync.set({ lead: {}, action: '' });
 }
 
 function createOptions(list) {
@@ -118,7 +120,6 @@ async function saveLead() {
     const res = await fetchRes.json();
     if (res.status) {
         alert('Lưu thông tin Lead thành công!');
-        chrome.storage.sync.set({ action: '' });
         window.close();
     } else {
         // check is res.message is an object or string

@@ -32,7 +32,7 @@ function getPersonInfo() {
     return personInfo;
 }
 
-function createIconButton(buttonId) {
+function createIconButton(buttonId, title) {
     // Create the main container div
     var mainDiv = document.createElement('div');
     mainDiv.id = buttonId;
@@ -87,8 +87,16 @@ function createIconButton(buttonId) {
     icon.style.backgroundRepeat = 'no-repeat';
     icon.style.display = 'inline-block';
 
+    // Create the div containing the button title
+    var titleDiv = document.createElement('div');
+    titleDiv.className = 'x1xqt7ti x1fvot60 xk50ysn xxio538 x1heor9g xuxw1ft x6ikm8r x10wlt62 xlyipyv x1h4wwuj xeuugli';
+    titleDiv.style.marginLeft = '8px';
+    titleDiv.id = buttonId + '_title';
+    titleDiv.textContent = title;
+
     // Append all elements
     innerDiv4.appendChild(icon);
+    innerDiv4.appendChild(titleDiv);
     innerDiv3.appendChild(innerDiv4);
     innerDiv1.appendChild(innerDiv2);
     innerDiv1.appendChild(innerDiv3);
@@ -170,7 +178,32 @@ function createCustomButton(id, title) {
 }
 
 window.onload = function () {
-    var button = createIconButton('btnGetLead', '');
+    const buttonId = 'btnGetLead';
+    var button = createIconButton(buttonId, 'Create lead');
+    const interval = setInterval(async () => {
+        const personInfo = getPersonInfo();
+        if (personInfo.profileLink) {
+            clearInterval(interval);
+            const profileLink = personInfo.profileLink;
+            console.log(profileLink);
+            const leads = await getLeads(profileLink);
+            console.log(leads);
+            if (leads.total > 0) {
+                const title = 'View lead';
+                const titleDiv = document.getElementById(buttonId + '_title');
+                titleDiv.textContent = title;
+            }
+        }
+    }, 1000);
+
+    // waitForElementAsync(ELEMENT_PROFILE_DETAIL, async (element) => {
+    //     console.log(element);
+    //     const personInfo = getPersonInfo();
+    //     const profileLink = personInfo.profileLink;
+    //     console.log(profileLink);
+    //     const leads = await getLeads(profileLink);
+    //     console.log(leads);
+    // });
     button.addEventListener('click', async function () {
         waitForElement(ELEMENT_PROFILE_DETAIL, () => {
             const personInfo = getPersonInfo();
@@ -195,4 +228,34 @@ function waitForElement(selector, callback) {
             callback(element);
         }
     }, 500);
+}
+
+function waitForElementAsync(selector, callback) {
+    const interval = setInterval(async () => {
+        const element = document.querySelector(selector);
+        if (element) {
+            clearInterval(interval);
+            await callback(element);
+        }
+    }, 3000);
+}
+
+const API_BASE_URL = 'https://earn.dev.codegym.vn/api';
+const LEAD_DETAIL_URL = 'https://earn.dev.codegym.vn/dashboard/resources/leads/'; // Prod: https://board.earn.codegym.vn/leads?leadId=
+
+async function getLeads(profileLink) {
+    const url = `${API_BASE_URL}/leads?search=${profileLink}`;
+    console.log(url);
+    // const ACCESS_TOKEN = localStorage.getItem('access_token');
+    const storage = await chrome.storage.sync.get("token");
+    const ACCESS_TOKEN = storage.token;
+    const options = {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${ACCESS_TOKEN}`
+        }
+    };
+    const fetchRes = await fetch(url, options);
+    const res = await fetchRes.json();
+    return res.data;
 }

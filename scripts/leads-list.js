@@ -18,7 +18,8 @@ window.onload = async function () {
 }
 
 document.getElementById('logout').addEventListener('click', function (e) {
-    localStorage.removeItem('access_token');
+    // localStorage.removeItem('access_token');
+    chrome.runtime.sendMessage({ type: 'clear-access-token' });
     window.location.href = 'popup.html';
   });
 

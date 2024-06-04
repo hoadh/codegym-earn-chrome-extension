@@ -4,7 +4,9 @@ export const LEAD_DETAIL_URL = 'https://earn.dev.codegym.vn/dashboard/resources/
 
 export async function getAPI(entity) {
     const url = `${API_BASE_URL}/${entity}`;
-    const ACCESS_TOKEN = localStorage.getItem('access_token');
+    // const ACCESS_TOKEN = localStorage.getItem('access_token');
+    const storage = await chrome.storage.sync.get("token");
+    const ACCESS_TOKEN = storage.token;
     const options = {
         method: 'GET',
         headers: {

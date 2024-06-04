@@ -7,8 +7,11 @@ chrome.runtime.onMessage.addListener(
             case 'clear-data':
                 clearData();
                 break;
-            case 'save-earn-token':
-                saveEarnToken(request.data);
+            case 'save-access-token':
+                chrome.storage.sync.set({ token: request.data });
+                break;
+            case 'clear-access-token':
+                chrome.storage.sync.set({ token: null });
                 break;
         }
     });
@@ -20,9 +23,4 @@ function addLead(data) {
 
 function clearData() {
     chrome.storage.sync.set({ lead: {}, action: '' });
-}
-
-function saveEarnToken(token) {
-    console.log('Saving earn token:', token);
-    chrome.storage.sync.set({ token });
 }

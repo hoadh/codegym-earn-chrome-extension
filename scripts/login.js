@@ -1,8 +1,9 @@
 import { API_BASE_URL, getAPI } from './common.js';
 
 window.onload = async function () {
-  const token = localStorage.getItem('access_token');
-  if (!token) {
+  // const token = localStorage.getItem('access_token');
+  const storage = await chrome.storage.sync.get("token");
+  if (!storage.token) {
     loginFail();
     return;
   }
@@ -46,7 +47,8 @@ function loginFail() {
 }
 
 document.getElementById('logout').addEventListener('click', function (e) {
-  localStorage.removeItem('access_token');
+  // localStorage.removeItem('access_token');
+  chrome.runtime.sendMessage({ type: 'clear-access-token'});
   loginForm.style.display = 'block';
   info.style.display = 'none';
   logout.style.display = 'none';
@@ -72,7 +74,8 @@ document.getElementById('loginForm').addEventListener('submit', async function (
     const res = await fetchRes.json();
 
     if (res.status) {
-      localStorage.setItem('access_token', res.data?.access_token);
+      // localStorage.setItem('access_token', res.data?.access_token);
+      chrome.runtime.sendMessage({ type: 'save-access-token', data: res.data?.access_token});
       localStorage.setItem('user_id', res.data?.id);
       chrome.runtime.sendMessage({ type: 'clear-data' });
       loginSuccess();
