@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener(
 
 function addLead(data) {
     chrome.storage.sync.set({ lead: data, action: 'openLeadForm' });
-    chrome.action.openPopup();
+    // chrome.action.openPopup();
 }
 
 function clearData() {
