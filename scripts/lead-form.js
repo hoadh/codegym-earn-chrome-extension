@@ -1,5 +1,4 @@
 import { API_BASE_URL, getAPI } from './common.js';
-const ACCESS_TOKEN = localStorage.getItem('access_token');
 
 document.getElementById('saveLead').addEventListener('click', saveLead);
 document.getElementById('switchName').addEventListener('click', function () {
@@ -78,6 +77,10 @@ function createSourcesOptions(sources) {
 }
 
 async function saveLead() {
+    const tokenData = await chrome.storage.sync.get("token");
+    const ACCESS_TOKEN = tokenData.token;
+    console.log('Token:', ACCESS_TOKEN);
+
     document.getElementById('info').innerHTML = ''; // Clear previous error messages
     const firstName = document.getElementById('firstName').value;
     const lastName = document.getElementById('lastName').value;

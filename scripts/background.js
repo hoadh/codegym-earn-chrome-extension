@@ -10,6 +10,9 @@ chrome.runtime.onMessage.addListener(
             case 'save-earn-token':
                 saveEarnToken(request.data);
                 break;
+            case 'clear-earn-token':
+                clearEarnToken();
+                break;
         }
     });
 
@@ -25,4 +28,8 @@ function clearData() {
 function saveEarnToken(token) {
     console.log('Saving earn token:', token);
     chrome.storage.sync.set({ token });
+}
+
+function clearEarnToken() {
+    chrome.storage.sync.set({ token: '' });
 }

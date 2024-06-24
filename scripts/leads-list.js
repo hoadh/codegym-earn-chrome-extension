@@ -18,9 +18,10 @@ window.onload = async function () {
 }
 
 document.getElementById('logout').addEventListener('click', function (e) {
-    localStorage.removeItem('access_token');
+    chrome.runtime.sendMessage({type: 'clear-earn-token'});
+    localStorage.setItem('user_id', '');
     window.location.href = 'popup.html';
-  });
+});
 
 function createLeadItem(list) {
     const items = list.map(lead => {
